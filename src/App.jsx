@@ -51,6 +51,7 @@ const firebaseConfig = {
   appId: "1:739107277735:web:fb02dc9535f6ca28608482"
 };
 
+const APPS_SCRIPT_URL = "https://script.google.com/a/macros/eu.averydennison.com/s/AKfycby_a-E08WSZ6UAs-CuUPVr5DZSnLhuOLw6_w9cASHkePv7uMUO7bjQ_k4KgpdG3clE3IA/exec";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -228,47 +229,64 @@ export default function App() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitError('');
+  e.preventDefault();
+  setSubmitError('');
 
-    if (!user) {
-      setSubmitError("L'authentification n'est pas encore prête. Réessaie dans quelques secondes.");
-      return;
-    }
+  if (!user) {
+    setSubmitError("L'authentification n'est pas encore prête. Réessaie dans quelques secondes.");
+    return;
+  }
 
-    if (!formData.groupName.trim()) {
-      setSubmitError('Merci de renseigner votre nom ou celui de votre famille.');
-      return;
-    }
+  if (!formData.groupName.trim()) {
+    setSubmitError('Merci de renseigner votre nom ou celui de votre famille.');
+    return;
+  }
 
-    if (formData.attending === 'yes' && totalGuests <= 0) {
-      setSubmitError('Merci de renseigner au moins un participant.');
-      return;
-    }
+  if (formData.attending === 'yes' && totalGuests <= 0) {
+    setSubmitError('Merci de renseigner au moins un participant.');
+    return;
+  }
 
-    try {
-      setIsSubmitting(true);
-
-      await addDoc(rsvpCollectionRef, {
-        groupName: formData.groupName.trim(),
-        email: formData.email.trim(),
-        attending: formData.attending,
-        adults: formData.attending === 'yes' ? Number(formData.adults || 0) : 0,
-        children: formData.attending === 'yes' ? Number(formData.children || 0) : 0,
-        accommodation: formData.attending === 'yes' ? formData.accommodation : 'no',
-        message: formData.message.trim(),
-        totalGuests: formData.attending === 'yes' ? totalGuests : 0,
-        createdAt: serverTimestamp(),
-      });
-
-      setSubmitted(true);
-    } catch (error) {
-      console.error(error);
-      setSubmitError("Une erreur s'est produite lors de l'enregistrement. Vérifie Firebase puis réessaie.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const payload = {
+    groupName: formData.groupName.trim(),
+    email: formData.email.trim(),
+    attending: formData.attending,
+    adults: formData.attending === 'yes' ? Number(formData.adults || 0) : 0,
+    children: formData.attending === 'yes' ? Number(formData.children || 0) : 0,
+    accommodation: formData.attending === 'yes' ? formData.accommodation : 'no',
+    message: formData.message.trim(),
+    totalGuests: formData.attending === 'yes' ? totalGuests : 0,
   };
+
+  try {
+    setIsSubmitting(true);
+
+    // 1) Enregistrement dans Firestore
+    await addDoc(rsvpCollectionRef, {
+      ...payload,
+      createdAt: serverTimestamp(),
+    });
+
+    // 2) Envoi au Google Sheet via Apps Script
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const resultText = await response.text();
+    console.log('Apps Script response:', resultText);
+
+    setSubmitted(true);
+  } catch (error) {
+    console.error(error);
+    setSubmitError("Une erreur s'est produite lors de l'enregistrement.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="site-shell">
