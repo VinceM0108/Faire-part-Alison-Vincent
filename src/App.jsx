@@ -51,7 +51,7 @@ const firebaseConfig = {
   appId: "1:739107277735:web:fb02dc9535f6ca28608482"
 };
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby79-ws5mAM66_nclCOzpU_grBKz0c2ZSGnVTxTQKId2-xAai_eUtHR_h6_7AmNr3Q8lg/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk1VwN4sapTwWHIfj9c2a79aVjPJdqdRTsshfQiLxGbrQNsZ2G6L5BMOE2Hsm9QigXDQ/exec";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
