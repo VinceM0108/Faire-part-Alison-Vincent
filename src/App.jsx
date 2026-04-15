@@ -286,17 +286,7 @@ export default function App() {
     });
 
     // 2) Envoi au Google Sheet via Apps Script
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const resultText = await response.text();
-    console.log('Apps Script response:', resultText);
-
+    postToAppsScript(payload);
     setSubmitted(true);
   } catch (error) {
     console.error(error);
