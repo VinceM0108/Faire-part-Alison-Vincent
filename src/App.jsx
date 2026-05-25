@@ -476,11 +476,27 @@ export default function App() {
               {!submitted ? (
                 <form className="rsvp-form" onSubmit={handleSubmit}>
                   <div className="form-grid">
-  		   <div className="form-group">
-    		    <label>Prénom</label>
-    		    <input
-     		    type="text"
-	
+ 			 <div className="form-group">
+			    <label>Prénom</label>
+			    <input
+			      type="text"
+			      value={formData.firstName}
+			      onChange={(e) => updateField('firstName', e.target.value)}
+			      placeholder="Ex : Julie"
+			      required
+			    />
+			  </div>
+			  <div className="form-group">
+			    <label>Nom</label>
+			    <input
+			      type="text"
+			      value={formData.lastName}
+			      onChange={(e) => updateField('lastName', e.target.value)}
+ 			     placeholder="Ex : Martin"
+ 			     required
+ 			   />
+ 			 </div>
+			</div>
 
                   <div className="form-group">
                     <label>Email</label>
