@@ -125,12 +125,22 @@ button {
   margin: 12px 0 8px;
   font-size: clamp(3.2rem, 10vw, 6.8rem);
   line-height: 0.95;
-  text-align: center;
+  
+  /* ✨ Création de la grille d'alignement ✨ */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px; /* Espace autour du & */
 }
 
-.hero-title span {
-  color: var(--accent);
-  font-weight: 500;
+/* Prénom de la mariée (poussé vers le centre) */
+.hero-title span:first-child {
+  text-align: right;
+}
+
+/* Prénom du marié (poussé vers le centre) */
+.hero-title span:last-child {
+  text-align: left;
 }
 
 .hero-date {
