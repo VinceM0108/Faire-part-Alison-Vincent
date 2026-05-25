@@ -586,7 +586,7 @@ export default function App() {
                       rows="4"
                       value={formData.message}
                       onChange={(e) => updateField('message', e.target.value)}
-                      placeholder="Un petit mot, une précision, une contrainte particulière..."
+                      placeholder="Un petit mot, une précision, des allergies, une contrainte particulière..."
                     />
                   </div>
 
