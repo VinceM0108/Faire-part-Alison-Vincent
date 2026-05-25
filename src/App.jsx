@@ -210,7 +210,8 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    groupName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     attending: 'yes',
     adults: 2,
@@ -261,8 +262,8 @@ export default function App() {
       return;
     }
 
-    if (!formData.groupName.trim()) {
-      setSubmitError('Merci de renseigner votre nom ou celui de votre famille.');
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      setSubmitError('Merci de renseigner votre prénom et votre nom.');
       return;
     }
 
@@ -275,7 +276,8 @@ export default function App() {
       setIsSubmitting(true);
 
       await addDoc(rsvpCollectionRef, {
-        groupName: formData.groupName.trim(),
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
         email: formData.email.trim(),
         attending: formData.attending,
         adults: formData.attending === 'yes' ? Number(formData.adults || 0) : 0,
@@ -473,16 +475,12 @@ export default function App() {
             <div className="rsvp-card">
               {!submitted ? (
                 <form className="rsvp-form" onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label>Nom / Famille</label>
-                    <input
-                      type="text"
-                      value={formData.groupName}
-                      onChange={(e) => updateField('groupName', e.target.value)}
-                      placeholder="Ex : Famille Martin"
-                      required
-                    />
-                  </div>
+                  <div className="form-grid">
+  		   <div className="form-group">
+    		    <label>Prénom</label>
+    		    <input
+     		    type="text"
+	
 
                   <div className="form-group">
                     <label>Email</label>
@@ -599,7 +597,8 @@ export default function App() {
                     onClick={() => {
                       setSubmitted(false);
                       setFormData({
-                        groupName: '',
+                        firstName: '',
+    			lastName: '',
                         email: '',
                         attending: 'yes',
                         adults: 2,
