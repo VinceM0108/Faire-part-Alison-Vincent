@@ -20,7 +20,7 @@ const WEDDING = {
   ceremonyAddress: '54200 Boucq',
   mapsCeremonyUrl: 'https://maps.google.com/?q=Eglise+de+Boucq',
 
-  cocktailTime: '18h00',
+  cocktailTime: '18h00 - 20h00',
   cocktailPlace: 'Château de Boucq',
   cocktailDetails: 'Cocktail festif dans les jardins du château.',
   mapsReceptionUrl: 'https://maps.google.com/?q=Chateau+de+Boucq',
