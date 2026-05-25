@@ -6,29 +6,36 @@ import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/fire
 /**
  * =========================================================
  * 1) PERSONNALISATION DU SITE
- * Modifie uniquement ce bloc pour adapter le faire-part
  * =========================================================
  */
 const WEDDING = {
   bride: 'Alison',
   groom: 'Vincent',
-  date: '2027-05-15T17:00:00',
+  date: '2027-05-15T16:30:00', // Mise à jour de l'heure
   displayDate: 'Samedi 15 mai 2027',
   countdownLabel: 'Nous avons hâte de célébrer ce jour avec vous',
-  city: 'Boucq',
-  ceremonyTime: '17h00',
+  
+  ceremonyTime: '16h30',
   ceremonyPlace: 'Église de Boucq',
   ceremonyAddress: '54200 Boucq',
-  receptionTime: '19h00',
-  receptionPlace: 'Château de Boucq',
-  receptionDetails: 'Cocktail, dîner et soirée dansante dans les jardins et salons du château.',
+  mapsCeremonyUrl: 'https://maps.google.com/?q=Eglise+de+Boucq',
+
+  cocktailTime: '18h00',
+  cocktailPlace: 'Château de Boucq',
+  cocktailDetails: 'Cocktail festif dans les jardins du château.',
+  mapsReceptionUrl: 'https://maps.google.com/?q=Chateau+de+Boucq',
+
+  dinnerTime: '20h00',
+  dinnerPlace: 'Château de Boucq',
+  dinnerDetails: 'Dîner et soirée dansante dans les salons du château.',
+
   accommodationText:
     'Des logements sont disponibles sur place. Une participation de 45€ par adulte sera demandée pour la nuitée.',
+  
   rsvpDeadline: '1er mars 2027',
   contactName: 'Vincent',
   contactEmail: 'votre-email@exemple.com',
-  mapsCeremonyUrl: 'https://maps.google.com/?q=Eglise+de+Boucq',
-  mapsReceptionUrl: 'https://maps.google.com/?q=Chateau+de+Boucq',
+  
   introText:
     'Avec beaucoup de joie, nous vous invitons à partager l’un des plus beaux jours de notre vie. Votre présence à nos côtés rendra cette journée encore plus précieuse.',
   footerText:
@@ -38,8 +45,6 @@ const WEDDING = {
 /**
  * =========================================================
  * 2) CONFIG FIREBASE
- * Colle ici la configuration de ton projet Firebase
- * Console Firebase > Paramètres du projet > Tes applis > App Web
  * =========================================================
  */
 const firebaseConfig = {
@@ -107,6 +112,22 @@ const IconUsers = () => (
     <path d="M3.5 18a5.5 5.5 0 0 1 11 0" />
     <circle cx="17" cy="9" r="2.5" />
     <path d="M14.8 18a4.7 4.7 0 0 1 5.2-4.2" />
+  </svg>
+);
+
+const IconGlass = () => (
+  <svg viewBox="0 0 24 24" className="icon" aria-hidden="true">
+    <path d="M8 22h8" />
+    <path d="M12 15v7" />
+    <path d="M12 15a7.1 7.1 0 0 0 7-7.1L19 3H5l.1 4.9A7.1 7.1 0 0 0 12 15Z" />
+  </svg>
+);
+
+const IconUtensils = () => (
+  <svg viewBox="0 0 24 24" className="icon" aria-hidden="true">
+    <path d="M3 2v7c0 2.2 1.8 4 4 4h0c2.2 0 4-1.8 4-4V2" />
+    <path d="M7 2v20" />
+    <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
   </svg>
 );
 
@@ -178,6 +199,10 @@ function SectionTitle({ overline, title, text }) {
 }
 
 export default function App() {
+  // Détection du paramètre URL ?invite=repas
+  const searchParams = new URLSearchParams(window.location.search);
+  const isDinnerGuest = searchParams.get('invite') === 'repas';
+
   const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -255,9 +280,10 @@ export default function App() {
         attending: formData.attending,
         adults: formData.attending === 'yes' ? Number(formData.adults || 0) : 0,
         children: formData.attending === 'yes' ? Number(formData.children || 0) : 0,
-        accommodation: formData.attending === 'yes' ? formData.accommodation : 'no',
+        accommodation: (formData.attending === 'yes' && isDinnerGuest) ? formData.accommodation : 'no',
         message: formData.message.trim(),
         totalGuests: formData.attending === 'yes' ? totalGuests : 0,
+        guestType: isDinnerGuest ? 'Dîner' : 'Cocktail',
         createdAt: serverTimestamp(),
       });
 
@@ -280,10 +306,10 @@ export default function App() {
           <p className="hero-overline">Faire-part de mariage</p>
           <IconHeart />
           <h1 className="hero-title">
-  	  <span>{WEDDING.bride}</span>
-  	  <span className="ampersand">&</span>
-  	  <span>{WEDDING.groom}</span>
-	  </h1>
+            <span>{WEDDING.bride}</span>
+            <span className="ampersand">&</span>
+            <span>{WEDDING.groom}</span>
+          </h1>
           <p className="hero-date">{WEDDING.displayDate}</p>
           <p className="hero-intro">{WEDDING.introText}</p>
 
@@ -331,15 +357,15 @@ export default function App() {
 
             <article className="event-card">
               <div className="event-icon-wrap">
-                <IconHeart />
+                <IconGlass />
               </div>
-              <h3>Réception</h3>
+              <h3>Cocktail</h3>
               <p className="event-meta">
                 <IconClock />
-                <span>{WEDDING.receptionTime}</span>
+                <span>{WEDDING.cocktailTime}</span>
               </p>
-              <p className="event-place">{WEDDING.receptionPlace}</p>
-              <p className="event-address">{WEDDING.receptionDetails}</p>
+              <p className="event-place">{WEDDING.cocktailPlace}</p>
+              <p className="event-address">{WEDDING.cocktailDetails}</p>
               <a
                 className="secondary-link"
                 href={WEDDING.mapsReceptionUrl}
@@ -351,16 +377,33 @@ export default function App() {
               </a>
             </article>
 
-            <article className="event-card">
-              <div className="event-icon-wrap">
-                <IconHome />
-              </div>
-              <h3>Hébergement</h3>
-              <p className="event-address">{WEDDING.accommodationText}</p>
-              <p className="event-note">
-                Merci de nous indiquer dans le formulaire si vous souhaitez dormir sur place.
-              </p>
-            </article>
+            {isDinnerGuest && (
+              <>
+                <article className="event-card">
+                  <div className="event-icon-wrap">
+                    <IconUtensils />
+                  </div>
+                  <h3>Dîner</h3>
+                  <p className="event-meta">
+                    <IconClock />
+                    <span>{WEDDING.dinnerTime}</span>
+                  </p>
+                  <p className="event-place">{WEDDING.dinnerPlace}</p>
+                  <p className="event-address">{WEDDING.dinnerDetails}</p>
+                </article>
+
+                <article className="event-card">
+                  <div className="event-icon-wrap">
+                    <IconHome />
+                  </div>
+                  <h3>Hébergement</h3>
+                  <p className="event-address">{WEDDING.accommodationText}</p>
+                  <p className="event-note">
+                    Merci de nous indiquer dans le formulaire si vous souhaitez dormir sur place.
+                  </p>
+                </article>
+              </>
+            )}
           </div>
         </section>
 
@@ -388,13 +431,15 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="detail-item">
-                <span className="detail-number">03</span>
-                <div>
-                  <h4>Logement</h4>
-                  <p>Indique si vous souhaitez dormir sur place afin que nous puissions nous organiser.</p>
+              {isDinnerGuest && (
+                <div className="detail-item">
+                  <span className="detail-number">03</span>
+                  <div>
+                    <h4>Logement</h4>
+                    <p>Indique si vous souhaitez dormir sur place afin que nous puissions nous organiser.</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </section>
@@ -493,25 +538,27 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="form-group">
-                        <label>Souhaitez-vous dormir sur place ?</label>
-                        <div className="choice-row">
-                          <button
-                            type="button"
-                            className={`choice-button ${formData.accommodation === 'yes' ? 'is-active yes' : ''}`}
-                            onClick={() => updateField('accommodation', 'yes')}
-                          >
-                            Oui
-                          </button>
-                          <button
-                            type="button"
-                            className={`choice-button ${formData.accommodation === 'no' ? 'is-active no' : ''}`}
-                            onClick={() => updateField('accommodation', 'no')}
-                          >
-                            Non
-                          </button>
+                      {isDinnerGuest && (
+                        <div className="form-group">
+                          <label>Souhaitez-vous dormir sur place ?</label>
+                          <div className="choice-row">
+                            <button
+                              type="button"
+                              className={`choice-button ${formData.accommodation === 'yes' ? 'is-active yes' : ''}`}
+                              onClick={() => updateField('accommodation', 'yes')}
+                            >
+                              Oui
+                            </button>
+                            <button
+                              type="button"
+                              className={`choice-button ${formData.accommodation === 'no' ? 'is-active no' : ''}`}
+                              onClick={() => updateField('accommodation', 'no')}
+                            >
+                              Non
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </>
                   ) : null}
 
