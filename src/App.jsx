@@ -27,14 +27,14 @@ const WEDDING = {
 
   dinnerTime: '20h00',
   dinnerPlace: 'Château de Boucq',
-  dinnerDetails: 'Dîner et soirée dans la cave voutée du château jusqu'au bout de la nuit.',
+  dinnerDetails: "Dîner et soirée dans la cave voutée du château jusqu'au bout de la nuit.",
 
   accommodationText:
     'Des logements sont disponibles sur place. Une participation de 45€ par adulte sera demandée pour la nuitée.',
   
   rsvpDeadline: '15 Janvier 2027',
   contactName: 'Vincent & Alison',
-  contactEmail: ' & ',
+  contactEmail: '0645160879 & 0679012912',
   
   introText:
     'Avec beaucoup de joie, nous vous invitons à partager l’un des plus beaux jours de notre vie. Votre présence à nos côtés rendra cette journée encore plus précieuse.',
