@@ -285,7 +285,6 @@ export default function App() {
   	  <span>{WEDDING.groom}</span>
 	  </h1>
           <p className="hero-date">{WEDDING.displayDate}</p>
-          <p className="hero-location">{WEDDING.city}</p>
           <p className="hero-intro">{WEDDING.introText}</p>
 
           <div className="hero-card">
