@@ -27,7 +27,7 @@ const WEDDING = {
 
   dinnerTime: '20h00',
   dinnerPlace: 'Château de Boucq',
-  dinnerDetails: 'Dîner et soirée dansante dans les salons du château.',
+  dinnerDetails: 'Dîner et soirée dansante dans la cave voutée du château.',
 
   accommodationText:
     'Des logements sont disponibles sur place. Une participation de 45€ par adulte sera demandée pour la nuitée.',
