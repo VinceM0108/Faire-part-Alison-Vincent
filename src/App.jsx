@@ -34,7 +34,7 @@ const WEDDING = {
   
   rsvpDeadline: '15 Janvier 2027',
   contactName: 'Vincent & Alison',
-  contactEmail: '0645160879 & 0679012912',
+  contactEmail: ' & ',
   
   introText:
     'Avec beaucoup de joie, nous vous invitons à partager l’un des plus beaux jours de notre vie. Votre présence à nos côtés rendra cette journée encore plus précieuse.',
