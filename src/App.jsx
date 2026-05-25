@@ -582,9 +582,7 @@ export default function App() {
                     {isSubmitting ? 'Enregistrement...' : 'Envoyer ma réponse'}
                   </button>
 
-                  <p className="form-note">
-                    Les réponses sont enregistrées automatiquement dans Firebase.
-                  </p>
+                  
                 </form>
               ) : (
                 <div className="success-state">
