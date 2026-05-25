@@ -275,7 +275,8 @@ export default function App() {
     try {
       setIsSubmitting(true);
 
-      await addDoc(rsvpCollectionRef, {
+      // 1. On prépare les données
+      const rsvpData = {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         email: formData.email.trim(),
@@ -286,13 +287,29 @@ export default function App() {
         message: formData.message.trim(),
         totalGuests: formData.attending === 'yes' ? totalGuests : 0,
         guestType: isDinnerGuest ? 'Dîner' : 'Cocktail',
+      };
+
+      // 2. Envoi à Firebase
+      await addDoc(rsvpCollectionRef, {
+        ...rsvpData,
         createdAt: serverTimestamp(),
+      });
+
+      // 3. Envoi à Google Sheets via Apps Script
+      // Remplace la ligne ci-dessous par ton URL copiée à l'étape 1
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbzk1VwN4sapTwWHIfj9c2a79aVjPJdqdRTsshfQiLxGbrQNsZ2G6L5BMOE2Hsm9QigXDQ/exec'; 
+      
+      await fetch(scriptURL, {
+        method: 'POST',
+        // Astuce : on utilise text/plain pour éviter les erreurs CORS de Google
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(rsvpData)
       });
 
       setSubmitted(true);
     } catch (error) {
       console.error(error);
-      setSubmitError("Une erreur s'est produite lors de l'enregistrement. Vérifie Firebase puis réessaie.");
+      setSubmitError("Une erreur s'est produite lors de l'enregistrement. Vérifie ta connexion puis réessaie.");
     } finally {
       setIsSubmitting(false);
     }
