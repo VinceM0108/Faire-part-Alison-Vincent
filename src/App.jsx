@@ -327,10 +327,14 @@ export default function App() {
       <main>
         <section className="section container">
           <SectionTitle
-            overline="Le programme"
-            title="Une journée pleine d’émotion"
-            text="Nous serions très heureux de vous retrouver pour célébrer notre union, partager un dîner, et prolonger la fête jusque tard dans la nuit."
-          />
+  	   overline="Le programme"
+  	    title="Une journée pleine d’émotion"
+  	    text={
+    	     isDinnerGuest
+      	      ? "Nous serions très heureux de vous retrouver pour célébrer notre union, partager un dîner, et prolonger la fête jusque 			 tard dans la nuit."
+      	      : "Nous serions très heureux de vous retrouver pour célébrer notre union puis partager un verre en votre compagnie dans les 	         jardins du château."
+  	    }
+	  />
 
           <div className="event-grid">
             <article className="event-card">
