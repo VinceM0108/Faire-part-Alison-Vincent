@@ -517,7 +517,9 @@ export default function App() {
 			</div>
 
                   <div className="form-group">
-                    <label>Email</label>
+                    <label>
+    		     Email <span className="label-note">(pour vous envoyer le lien des photos à télécharger après le mariage)</span>
+  		    </label>
                     <input
                       type="email"
                       value={formData.email}

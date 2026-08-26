@@ -648,3 +648,18 @@ button {
     font-size: 1rem;
   }
 }
+/* 1) Augmentation de la taille de la date en haut de page */
+.hero-date {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem); /* Augmenté (anciennement 1.3rem) */
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-top: 14px;
+}
+
+/* 2) Style pour la note d'explication de l'adresse mail */
+.label-note {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--muted);
+  font-style: italic;
+}
